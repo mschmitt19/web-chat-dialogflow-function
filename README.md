@@ -22,7 +22,7 @@ If the Google Dialogflow bot detects the customer would like to speak to an agen
 
 ### Diagram
 
-<img  src="./diagram.png"  alt="Twilio"  width="100%"  />
+<img  src="./readme_assets/diagram.png"  alt="Twilio"  width="100%"  />
 
 ---
 
@@ -60,9 +60,18 @@ Starting with the Google Dialogflow agent, we need to create a new agent and do 
 
 5. It should take a few seconds to create the agent. Next, let's build a couple intents:
 
-- TODO: add in intent creation
+   #### Cost Inquiry
 
-6. We now have our agent configured with several intents so we are ready to move on. We will need a Google service account to access the agent via API. To set this up, navigate to the general agent options by clicking on the cog once again. Make sure you make a note of your project id, as you will need it later.
+   <img  src="./readme_assets/cost_inquiry_phrases.png"  alt="Twilio"  width="100%"  />
+   <img  src="./readme_assets/cost_inquiry_parameters.png"  alt="Twilio"  width="100%"  />
+   <img  src="./readme_assets/cost_inquiry_responses.png"  alt="Twilio"  width="100%"  />
+
+   #### AgentEscalation
+
+   <img  src="./readme_assets/escalation_phrases.png"  alt="Twilio"  width="100%"  />
+   <img  src="./readme_assets/escalation_responses.png"  alt="Twilio"  width="100%"  />
+
+6. We now have our agent configured with a couple intents so we are ready to move on. We will need a Google service account to access the agent via API. To set this up, navigate to the general agent options by clicking on the cog once again. Make sure you make a note of your project id, as you will need it later.
 
 <img  src="https://twilio-cms-prod.s3.amazonaws.com/images/Screenshot_2022-04-21_at_13.58.55.width-1600.png"  alt="Twilio"  width="800" />
 
@@ -129,13 +138,42 @@ We now need to deploy the function that will facilitate the API calls to the Goo
 
 ### Studio Flow Creation
 
-<span style="color:red">TODO: steps to create studio flow & redirect Flex web chat to this flow</span>
+Now we need to create a new Studio flow to handle the incoming messages for Web Chat (_note_: editing the existing Web Chat flow configured into Flex is also an option).
+
+<img  src="./readme_assets/studio_flow.png"  alt="Twilio"  width="100%"  />
+
+#### Widget Details
+
+- **Chat_Variables** - sets the incoming message text to a variable named `customerMessage`
+- **send_to_GDF** - configured to execute the Twilio function deployed in the previous step, with a _Function Parameter_ of `customerMessage` set to `{{flow.variables.customerMessage}}`
+- **Set_Response_Text** - sets two more variables based off the response from Dialogflow:
+  - `fulfillmentText`: `{{widgets.send_to_GDF.parsed.fulfillmentText}}`
+  - `intent`: `{{widgets.send_to_GDF.parsed.intent.displayName}}`
+- **check_escalation** - checks the `intent` flow variable if an agent escalation is needed
+- **send_bot_message** - delivers the bot response to the Web Chat channel
+- **Send_Final_Bot_Message** - delivers final message from bot indicating the session will be handed off to an agent
+- **send_to_flex_1** - sends the chat session over to Flex to be picked up by an available agent
+
+#### Configuring Flex
+
+After setting up the Studio flow outlined above, it is time to configure Flex to route incoming Web Chat messages to this flow.
+
+1. Navigate to the Flex product page in the Twilio Console.
+2. Click on `Manage` > `Messaging`.
+3. Under the `WebChat` row entry, click the `Edit` button and select the new Studio flow created in the previous step.
+4. Flex is now configured to route incoming WebChat messages to the new Studio flow.
 
 ---
 
 ## Test Setup
 
-<span style="color:red">TODO: instructions to test with the Web Chat demo widget</span>
+To test this solution:
+
+1. Launch Flex from the Twilio console.
+2. Ensure you are set to `Available` to enable the ability to receive incoming WebChat tasks as an agent.
+3. Launch the demo chat widget from the admin screen in Flex.
+4. Enter a chat message to observe the responses from Google Dialogflow.
+5. Enter one of the training phrases for the `Agent Escalation` path, then view the incoming task in Flex.
 
 ---
 
