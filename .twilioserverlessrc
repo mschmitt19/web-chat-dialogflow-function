@@ -1,7 +1,7 @@
 {
-	"commands": {},
-	"environments": {},
-	"projects": {},
-	"runtime": "node14" 	/* The version of Node.js to deploy the build to. (node14) */,
- 	"serviceName": "web-chat-dialogflow" 	/* Overrides the name of the Serverless project. Default: the name field in your package.json */,
+  "commands": {},
+  "environments": {},
+  "projects": {},
+  "runtime": "node14",
+  "serviceName": "web-chat-dialogflow"
 }
