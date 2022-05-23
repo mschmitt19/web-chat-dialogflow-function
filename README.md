@@ -10,23 +10,19 @@ If the Google Dialogflow bot detects the customer would like to speak to an agen
 
 ---
 
-## Functionality
-
-<span style="color:red">TODO: add functionality overview</span>
+## Functionality Overview
 
 ### Technical Components
 
-<span style="color:red">TODO: list of technical components included</span>
-
-- Twilio Serverless Function
-- Twilio Studio Flows
-- Twilio Flex
-- Google Dialogflow
-- Google Cloud Platform
+- **Twilio Serverless Function** - used to orchestrate the API requests to Google Dialogflow
+- **Twilio Studio Flows** - custom studio flow to handle incoming messages and responses to the client side
+- **Twilio Flex** - agent escalation use case
+- **Google Dialogflow** - given a message (text), NLP processing determines the intent and response
+- **Google Cloud Platform** - houses the service account credentials to perform authenticated API calls from the Twilio Function
 
 ### Diagram
 
-<span style="color:red">TODO: diagram of moving parts of solution</span>
+<img  src="./diagram.png"  alt="Twilio"  width="100%"  />
 
 ---
 
